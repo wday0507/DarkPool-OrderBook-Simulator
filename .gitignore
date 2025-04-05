@@ -1,0 +1,15 @@
+# Ignore Python cache
+__pycache__/
+
+# Ignore notes
+Notes on orderbook project.txt
+Notes.py
+
+# Ignore these folders
+Archive/
+tests/
+
+# OneDrive sync files
+*.tmp
+*.bak
+*.lnk
