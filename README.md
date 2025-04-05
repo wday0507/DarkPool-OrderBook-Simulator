@@ -69,6 +69,10 @@ The below chart depicts the cumulative quantities of visible orders at each give
 
 ### **Order Book Table**
 
+The below table shows a summary of the 8 most competitive bid and ask orders in the order book and their respective quantities.
+![image](https://github.com/user-attachments/assets/4da7c1ec-a4d0-41ce-b6cf-a56ef5c67838)
+
+
 ### **Profiling Results**
 
 
