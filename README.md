@@ -3,6 +3,7 @@
 ## **Project Overview**
 
 ## **Project Motivation**
+I completed this project in order to develop and demonstrate my skills in python, data structures and algorithms as well as improving my understanding of market microstructure.
 
 ## **File Descriptions**
 ### **orderbook_v35**
@@ -43,8 +44,15 @@ Some unique features of the matching logic include (but is not limited to):
               - FOK orders -> calcualte the sum of availble asks (for bid orders) that are available to match with before proceeding
 
 ### **test_orderbook**
+This file test the logic of all 16 matching functions. Specifically it tests:
+       - Full matching
+       - Partial matching
+       - FIFO - do orders match with the earliest order when choosing between 2 orders at the same price
+       - Price priorty - do orders always match at the best possible price
+       - Darkpool logic - do visible (darkpool) orders always match opposing visible (darkpool) orders
 
 ### **ob_sim**
+This file generates random bid and ask orders so we can visualise the matching that takes place in the order book. The file concurrently genreates ordesr, removes expired orders, and generates the orderbook visualisation. The user can choose between an orderboko graph and chart (discussed below).
 
 ### **ob_profiler**
 
