@@ -74,8 +74,12 @@ The below table shows a summary of the 8 most competitive bid and ask orders in 
 ![image](https://github.com/user-attachments/assets/cef939f2-c233-462a-83d3-563a7ae0f901)
 
 
-
 ### **Profiling Results**
+The below is a screenshot of the profiling results from the ob_profiler file. This decomposes the 60 second orderbook simulation into the time spent in each function. 
+This was very useful for streamlining my code, for example FOK orders require calculating the available quantity in the book that can match with this order. Initially, I crudelly used a sum() list comprehension over both the visible and darkpool orderbooks to calculate the avialable quantity. The profiling results highlighted how time consuming this was, which was concerning since only 5% of orders are FOK, I changed my approach to only iterate over the orderbook and stop when I knew there was at least as much available quantity in the book as the order required. This makes a big difference when the orderbook grows very large.
+
+
+![image](https://github.com/user-attachments/assets/11a31476-8231-4fe6-808b-18d373525a60)
 
 
 ## **How to run the project**
@@ -83,5 +87,20 @@ The below table shows a summary of the 8 most competitive bid and ask orders in 
 ## **Design Choices**
 
 ## **Future Improvements**
+1/ Language Limitation
+This project is implemented in Python, because I am currently focused on developing my proficiency in the language. While Python is excellent for development and readability, it is not the best option for high frequency trading systems. An obvious future enhancement would be to write the code in a compiled language (e.g. C or C++), which would provide significant speed improvements and better control over memory management.
+
+2/ Extend Matching Logic
+To further enhance realism, advanced order behaviors could be added:
+       - New Order Types: Add support for stop orders (triggered when price crosses a threshold) and iceberg orders (only partially visible in the book, with hidden size revealed over time). 
+       - Order Modification and cancellation: Enable live adjustment or cancellation of active orders, where participants react to changing market conditions.
+
+
+3. User Interaction
+The simulation runs autonomously by generating random orders. An improvement would be allowing users to interact with the order book in real time, for example:
+       - Manually submitting buy/sell orders via a simple interface
+       - Observing immediate feedback and position changes
+       - This would transform the project from a passive simulation to an interactive trading demonstration
 
 ## **Contact Info**
+email: william.day@live.com
