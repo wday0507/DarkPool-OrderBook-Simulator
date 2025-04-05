@@ -1,6 +1,11 @@
 # **Order Book Simuation**
 
 ## **Project Overview**
+This project simulates an electronic order book, it handles limit, market, FOK and IOC order types. It supports both visible and dark pool orders, and matches orders based on price priority and FIFO rules. It also includes
+       - a testing file to ensure robustness
+       - a profiling tool for performance analysis
+       - a simulation module that generates random orders for visualisation
+It is implemented in Python, with efficient data structures such as sorted lists and dictionaries for managing orders.
 
 ## **Project Motivation**
 I completed this project in order to develop and demonstrate my skills in python, data structures and algorithms as well as improving my understanding of market microstructure.
