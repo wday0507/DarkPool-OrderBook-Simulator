@@ -85,6 +85,14 @@ This was very useful for streamlining my code, for example FOK orders require ca
 ## **How to run the project**
 
 ## **Design Choices**
+Data Structures
+1/ Order Book (bids, asks, darkpool bids, darkpool asks)
+The order book uses a sorted list to store active orders, maintaining an efficient structure for price priority with minimal memory overhead. Each order is represented by its essential attributes (order ID, price, timestamp). The sorted list provides O(log n) time complexity for insertion and deletion, making it more efficient than a simple list when managing a large volume of orders.
+................ why is it better than a heap
+
+2/ Orders
+All active and inactive orders are stored in a dictionary. This allows for constant time access to any order's attributes.
+
 
 ## **Future Improvements**
 1/ Language Limitation
