@@ -28,10 +28,19 @@ The orderbook lists store:
         - price (so orders can be sorted by price)
         - time (if orders have the same price, they must respect the FIFO principle)
         
-These are the order attributes that are essential for placing orders in the book correctly. The dicitonary of all orders is accessed to obtain other attributes such as quantity, expirty time,, order_type, etc...
+These are the order attributes that are essential for placing orders in the book correctly. The dictionary of all orders is accessed to obtain other attributes such as quantity, expirty time, order_type, etc...
       
+The Orderbook class has 16 separate functions to process specific order types. 2 sides, 4 order types, 2 visiblity options -> 16.
 
+Each of the 16 functions works differently, but they all contain the same core logic:
+       1/ match order with opposing side orders from the visible book (for visisble orders, vice versa for darkpool orders)
+       2/ if part of the order is not filled, match with opposing side of the darkpool book (for visisble orders, vice versa for darkpool orders)
+       3/ if part of the order is not filled, add it to the orderbook
 
+Some unique features of the matching logic include (but is not limited to):
+              - Visisble market orders -> track slipapge to measure market liquidity
+              - Limit orders -> only match with prices equal to or better than the order price
+              - FOK orders -> calcualte the sum of availble asks (for bid orders) that are available to match with before proceeding
 
 ### **test_orderbook**
 
