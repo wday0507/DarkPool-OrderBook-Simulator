@@ -52,15 +52,20 @@ This file test the logic of all 16 matching functions. Specifically it tests:
        - Darkpool logic - do visible (darkpool) orders always match opposing visible (darkpool) orders
 
 ### **ob_sim**
-This file generates random bid and ask orders so we can visualise the matching that takes place in the order book. The file concurrently genreates ordesr, removes expired orders, and generates the orderbook visualisation. The user can choose between an orderboko graph and chart (discussed below).
+This file generates random bid and ask orders so we can visualise the matching that takes place in the order book. The file concurrently genreates ordesr, removes expired orders, and generates the orderbook visualisation. The user can choose between an orderbook graph and chart (discussed below).
 
 ### **ob_profiler**
+This file generates an excel workbook that breaks down the simulation time into how much time was spent in each function, this is useful for optimising code performance.
 
 
 
 ## **Outputs**
 
 ### **Order Book Graph**
+The below chart depicts the cumulative quantities of visible orders at each given price level. 
+
+![image](https://github.com/user-attachments/assets/a47bf610-43f6-4efb-a2f6-02fe93ab04fd)
+
 
 ### **Order Book Table**
 
