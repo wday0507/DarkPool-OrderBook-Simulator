@@ -19,6 +19,7 @@ The Order class creates order objects. Orders can be:
 - Type: Market / Limit / Fill or Kill (FOK) / Immediate or Cancel (IOC)
 - Visibility: Visible / Dark pool
 
+&nbsp;<br>
 The Orderbook class deals with processing orders, matching and maintaining the order book. 
 The key data structures are:
 - A list of bid orders
@@ -27,83 +28,101 @@ The key data structures are:
 - A list of darkpool ask orders
 - A dictionary of all orders (active and inactive)
 
+&nbsp;<br>
 Visible and dark pool orders are separated to reflect the assumption that:
 - Visible orders prioritize matching against visible orders.
 - Dark pool orders prioritize matching against dark pool orders.
 
+&nbsp;<br>
 Each order stored in the book contains:
 - Order ID (unique identification of orders)
 - Price (for sorting orders by price)
 - Timestamp (for FIFO ordering at equal prices)
         
 The dictionary of all orders is accessed to obtain other attributes such as quantity, expiry time, order type, etc...
-      
+
+&nbsp;<br>
 There are 16 order matching functions to handle different combinations of:
 - 2 sides (Bid/Ask)
 - 4 order types (Market, Limit, FOK, IOC)
 - 2 visibility levels (Visible, Darkpool)
 
+&nbsp;<br>
 Each function follows a general pattern:
-1/ Attempt to match the order with the opposing side of the visible book (or dark pool book, depending on order visibility).
-2/ If the order is not filled, attempt to match with the opposing side of the darkpool book (or vice versa).
-3/ If still unfilled, add the remaining order to the book.
+- Attempt to match the order with the opposing side of the visible book (or dark pool book, depending on order visibility).
+- If the order is not filled, attempt to match with the opposing side of the darkpool book (or vice versa).
+- If still unfilled, add the remaining order to the book.
 
+&nbsp;<br>
 Some unique features of individual matching functions include (but is not limited to):
 - Visisble market orders -> track slipapge to measure market liquidity
 - Limit orders -> only match with prices equal to or better than the order price
 - FOK orders -> calculate availble matchable volume before processing the order to ensure full fill
 
+&nbsp;<br>
 ### **test_orderbook**
 This file test the logic of all 16 matching functions. Specifically it tests:
-- Full matching
-- Partial matching
-- FIFO - do orders match with the earliest order when choosing between 2 orders at the same price
-- Price priorty - do orders always match at the best possible price
-- Darkpool logic - do visible (darkpool) orders always match opposing visible (darkpool) orders
+- Full matching - orders are fully matched if possible
+- Partial matching - orders can be partially filled if there isn’t enough liquidity to fill the entire order.
+- FIFO - orders match with the earliest order when choosing between 2 orders at the same price
+- Price priorty - orders always match at the best possible price
+- Darkpool logic - orders always match with opposing orders of the same visiblity first
 
+&nbsp;<br>
 ### **ob_sim**
-This file generates random bid and ask orders so we can visualise the matching that takes place in the order book. The file concurrently genreates ordesr, removes expired orders, and generates the orderbook visualisation. The user can choose between an orderbook graph and chart (discussed below).
+This file generates random bid and ask orders to simulate and visualise order book activity. It concurrently generates orders, removes expired orders, and updates the orderbook visualisation. The user can choose between a graph view and chart view (discussed below).
 
+&nbsp;<br>
 ### **ob_profiler**
-This file generates an excel workbook that breaks down the simulation time into how much time was spent in each function, this is useful for optimising code performance.
+This file produces an excel workbook that breaks down total simulation time by function call. It’s useful for optimising the code.
 
-
-
+&nbsp;<br>
 ## **Outputs**
 
 ### **Order Book Graph**
-The below chart depicts the cumulative quantities of visible orders at each given price level. When the simulation is run, this updates in real time.
+The chart below displays the cumulative quantities of visible orders at each price level. When the simulation is run, it updates in real time.
 
 ![image](https://github.com/user-attachments/assets/a47bf610-43f6-4efb-a2f6-02fe93ab04fd)
 
-
+&nbsp;<br>
 ### **Order Book Table**
 
-The below table shows a summary of the 8 most competitive bid and ask orders in the order book and their respective quantities. When the simulation is run, this updates in real time.
+The table below shows a summary of the 8 most competitive bid and ask orders in the order book and their respective quantities. When the simulation is run, this updates in real time.
 
 ![image](https://github.com/user-attachments/assets/cef939f2-c233-462a-83d3-563a7ae0f901)
 
-
+&nbsp;<br>
 ### **Profiling Results**
-The below is a screenshot of the profiling results from the ob_profiler file. This decomposes the 60 second orderbook simulation into the time spent in each function. 
-This was very useful for streamlining my code, for example FOK orders require calculating the available quantity in the book that can match with this order. Initially, I crudelly used a sum() list comprehension over both the visible and darkpool orderbooks to calculate the avialable quantity. The profiling results highlighted how time consuming this was, which was concerning since only 5% of orders are FOK, I changed my approach to only iterate over the orderbook and stop when I knew there was at least as much available quantity in the book as the order required. This makes a big difference when the orderbook grows very large.
+Below is a screenshot of the profiling results from the ob_profiler file. It decomposes the 60 second order book simulation into the time spent in each function. This was useful for streamlining my code.
 
+For example, FOK orders require calculating the available quantity in the book that can match with the order. Initially, I used a crude sum() list comprehension over both the visible and dark pool order books to calculate the available quantity. The profiling results highlighted how time-consuming this approach was, which was concerning, especially since only 5% of orders are FOK.
+
+To optimise, I changed the approach to iterate over the order book and stop once I knew there was at least as much available quantity as required by the order. This change significantly improved performance, especially as the order book grows larger.
 
 ![image](https://github.com/user-attachments/assets/11a31476-8231-4fe6-808b-18d373525a60)
 
-
+&nbsp;<br>
 ## **How to run the project**
 
 ## **Design Choices**
 Data Structures
 1/ Order Book (bids, asks, darkpool bids, darkpool asks)
-The order book uses a sorted list to store active orders, maintaining an efficient structure for price priority with minimal memory overhead. Each order is represented by its essential attributes (order ID, price, timestamp). The sorted list provides O(log n) time complexity for insertion and deletion, making it more efficient than a simple list when managing a large volume of orders.
-................ why is it better than a heap
+The order book uses a sorted list to store active orders. A sorted list is a list data structure that automatically keeps its elements in order according to a given sorting critera, in this case, by price then time.
 
-2/ Orders
-All active and inactive orders are stored in a dictionary. This allows for constant time access to any order's attributes.
+A sorted list is useful in an order book because it ensures that you can easily access the highest bid and the lowest ask without having to search through the entire list. It also makes insertion efficient O(log n), ensuring that the order book can scale efficiently with a large volume of orders.
 
+Initially, I started this project by experimenting with more basic data structures, like list and dictionaries, to store orders. Both these structures come with significant drawbacks:
+- List: insertion and deletion of orders would take O(n) time because you'd need to search through the entire lis. Finding the best order would also require scanning the entire list each time.
+- Dictionary: allows for constant time access to orders, but it doesnt maintain any order, making it ineffective for an order book where price priority is critical.
 
+The sorted list improves upon these by providing an efficient way to keep the orders sorted at all times, allowing you to quickly access the best prices for matching and manage insertion and deletion in O(log n) time.
+
+As the project progressed, I experimented with both a sorted list and a heap to manage the order book. Conceptually, both structures seemed to fulfill the core requirements of order matching, as they both provide efficient insertion and deletion with price priority. However, through performance testing, I found that sorted lists slightly outperformed heaps in my specific use case.
+
+2/ Orders Dictionary
+All active and inactive orders are stored in a dictionary. This enables constant time access to any order's attributes. The dictionary structure is ideal for fast lookups and ensures efficient management of orders across different states (active, inactive, filled, visisble, darkpool etc..).
+
+&nbsp;<br>
 ## **Future Improvements**
 1/ Language Limitation
 This project is implemented in Python, because I am currently focused on developing my proficiency in the language. While Python is excellent for development and readability, it is not the best option for high frequency trading systems. An obvious future enhancement would be to write the code in a compiled language (e.g. C or C++), which would provide significant speed improvements and better control over memory management.
@@ -120,5 +139,6 @@ The simulation runs autonomously by generating random orders. An improvement wou
 - Observing immediate feedback and position changes
 - This would transform the project from a passive simulation to an interactive trading demonstration
 
+&nbsp;<br>
 ## **Contact Info**
 email: william.day@live.com
