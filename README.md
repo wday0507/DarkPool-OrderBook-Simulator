@@ -5,10 +5,15 @@ This project simulates an electronic order book, it handles limit, market, FOK a
 - a testing file to ensure robustness
 - a profiling tool for performance analysis
 - a simulation module that generates random orders for visualisation
+
 It is implemented in Python, with efficient data structures such as sorted lists and dictionaries for managing orders.
+
+&nbsp;<br>
 
 ## **Project Motivation**
 I completed this project in order to develop and demonstrate my skills in python, data structures and algorithms as well as improving my understanding of market microstructure.
+
+&nbsp;<br>
 
 ## **File Descriptions**
 ### **orderbook_v35**
@@ -103,6 +108,35 @@ To optimise, I changed the approach to iterate over the order book and stop once
 
 &nbsp;<br>
 ## **How to run the project**
+
+1/ Clone Repository
+Clone the repository to your local machine
+
+git clone https://github.com/wday0507/DarkPool-OrderBook-Simulator.git
+
+and then navigate to project directory with the actual path to where you cloned the project
+
+cd C:\Users\**********\DarkPool-OrderBook-Simulator
+
+&nbsp;<br>
+
+2/ Install Dependencies
+
+pip install -r requirements.txt
+
+&nbsp;<br>
+
+3/ Running the code
+
+To run the files, execute the following:
+
+Simulation -> python ob_sim.py
+
+Testing workbook -> python test_orderbook.py
+
+Profiling code -> python ob_profiler.py
+
+&nbsp;<br>
 
 ## **Design Choices**
 &nbsp;<br>
