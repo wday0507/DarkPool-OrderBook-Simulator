@@ -1,0 +1,122 @@
+Profiling Summary
+
+These notes show rough records of me profiling my code in order to improve the efficiency of my project.
+
+
+
+1. Initial Setup
+
+This is my first test case once I had a working version that passed all my test cases. These are my baseline settings, and will be used in following tests unless specified otherwise.
+
+- test duration: 60 seconds
+- order generation rate: Every 0.00001 seconds
+- expired order removal: Every 30 seconds
+- graph Updates: Every 2 seconds
+- time Validity Check: Every 2 seconds
+- threads: Generating orders, removing expired orders, updating graphs (3 threads)
+- Result: 81,374 orders generated
+
+
+
+2. Increased order generation rate
+- Order Generation Rate: Every 0.000001 seconds (10x more frequent)
+
+- Result: 80,529 orders generated
+- Increasing order generation rate did increase the total number of orders. Performance seemed to be reaching its limit around this rate.
+- FOK operations seem inefficient, possibly due to the sum() method being used.
+
+
+
+
+3. Reducing order generation rate
+- Order Generation Rate: Every 0.0001 seconds (100x less frequent)
+
+- Result: 78,091 orders generated
+- Order generation was significantly reduced, but the total number of orders generated remained almost the same as in the previous tests.
+  
+
+
+4. Same settings as in #3 except time of day was different 
+- Result: 62,081 orders generated
+- Consistency check at a different time of day. The result was -c20% compared to the previous test in terms of order generation. This means my results are quite variable.
+
+
+
+5. Removed output visual
+- Graph display turned off to see how inefficient it was
+- Result: 68,103 orders generated
+- Removing the graph display led to a 10% increase in order generation efficiency
+
+
+
+6. Disabled FOK Orders
+- No FOK orders, but added plot back in 
+- Result: 75,563 orders generated
+- disabling FOK orders resulted in a 21% increase in order generation, indicating FOK operations very inefficient
+
+
+
+7. Disabled FOK Orders and Plot
+- FOK orders, no plot
+- Result: 86,204 orders generated
+- removing  both FOK orders and the plot resulted in a 39% increase in order generation compared to #4, highlighting the efficiency gain from reducing both operations.
+
+
+
+8. consistency check 
+- same setup as #4 to check for consistency but on a different day (unsure of time difference)
+- result: 66,229 orders generated
+
+
+
+9. Consistency check 
+- same setup as #8, run a few hours later
+- result - 83,994 orders generated
+- There was a noticeable improvement in performance compared to the previous test. This reiterates how hard it is to compare performance when test conditions change. 
+
+
+
+10. Output table
+- output switched from graph to table
+- Result: 88,841 orders generated
+- switching from graph output to a table representation resulted in more efficient order generation, with an increase of around 10%. This was expected because the graph uses FuncAnimation() from matplotlib which involves more computational resource. Generating the output table in the console is a much lighter operation, reducing the processing time and allowing for faster order generation.
+
+
+
+11. consistency check
+## result - 75,250 orders generated
+
+
+
+12. updated FOK function
+- updated FOK function to only count orders until new orders arrive
+- result: 90,699 orders generated
+- the update to the FOK function resulted in a 20% increase in order count, showing that the new approach was more efficient. This was done straight after 11 (so is not due to timing)
+
+13 heap -> sorted list
+- changed from using a heap to store orders to sorted list, i ran the heap case and the sorted list case 3 times each to get an average
+- result: heap -> 90,945, sorted list -> 92,911
+- sorted lists are marginally better in my case, but still very similar
+
+
+13. code refactoring
+- code refactoring -> moving away from 3 layer approach, adding in helper functions to avoid replicating code
+- 95,117 orders generated -> refactoring led to improved performance, with a noticeable increase in order generation efficiency.
+
+
+
+
+Profiling Summary
+
+Code Streamlining -> Over time, I was able to streamline my code, which is reflected in the increased order generation. While improvements are not always immediately obvious, updating the FOK functions and code refactoring significantly increased order generation.
+
+Thorough testing -> i should have conducted more rigorous testing after each small change. While I did test the impact of major changes, I didn't always follow a strict process for evaluating the effect of every minor tweak, which could have provided more accurate insights into performance improvements.
+
+Consistency in testing -> Next time, I would place greater emphasis on consistency in test conditions. Factors such as the time of day (and possibly others I am unaware of) can significantly affect performance. This inconsistency makes it harder to compare the true effects of code optimisations.
+
+Graph visualisation impact -> Although the code generates approximately 90k orders per minute, the graph (which is resource intensive) reduces the potential output. Without the graph, order generation exceeds 100k orders per minute. The complexity of handling different order types also affects performance. If order generation speed was the sole priority, a simpler project with fewer features could be designed.
+
+Language choice -> The decision to implement the project in Python, rather than a low level language such as C or C++ limits performance, since Python's execution speed is slower.
+
+External factors -> performance is not solely dependent on code efficiency. external factors, such as running the simulation on my personal laptop, also influences the results. Limited computational resources can naturally slow down performance.
+
