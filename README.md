@@ -164,14 +164,23 @@ All active and inactive orders are stored in a dictionary. This enables constant
 &nbsp;<br>
 ## **Future Improvements**
 1/ Language Limitation
+
 This project is implemented in Python, because I am currently focused on developing my proficiency in the language. While Python is excellent for development and readability, it is not the best option for high frequency trading systems. An obvious future enhancement would be to write the code in a compiled language (e.g. C or C++), which would provide significant speed improvements and better control over memory management.
 
+&nbsp;<br>
+
+
 2/ Extend Matching Logic
+
 To further enhance realism, advanced order features could be added:
 - New Order Types: Add support for stop orders (triggered when price crosses a threshold) and iceberg orders (only partially visible in the book, with hidden size revealed over time)
 - Order Modification and cancellation: Enable live adjustment or cancellation of active orders, where participants react to changing market conditions
 
+&nbsp;<br>
+
+
 3/ User Interaction
+
 The simulation runs autonomously by generating random orders. An improvement would be allowing users to interact with the order book in real time, for example:
 - Manually submitting buy/sell orders via an interface
 - Observing immediate feedback and position changes. This would transform the project from a passive simulation to an interactive trading demonstration
