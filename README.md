@@ -105,8 +105,10 @@ To optimise, I changed the approach to iterate over the order book and stop once
 ## **How to run the project**
 
 ## **Design Choices**
-Data Structures
-1/ Order Book (bids, asks, darkpool bids, darkpool asks)
+&nbsp;<br>
+1/ Active Order Book 
+&nbsp;<br>
+
 The order book uses a sorted list to store active orders. A sorted list is a list data structure that automatically keeps its elements in order according to a given sorting critera, in this case, by price then time.
 
 A sorted list is useful in an order book because it ensures that you can easily access the highest bid and the lowest ask without having to search through the entire list. It also makes insertion efficient O(log n), ensuring that the order book can scale efficiently with a large volume of orders.
@@ -119,7 +121,10 @@ The sorted list improves upon these by providing an efficient way to keep the or
 
 As the project progressed, I experimented with both a sorted list and a heap to manage the order book. Conceptually, both structures seemed to fulfill the core requirements of order matching, as they both provide efficient insertion and deletion with price priority. However, through performance testing, I found that sorted lists slightly outperformed heaps in my specific use case.
 
-2/ Orders Dictionary
+&nbsp;<br>
+
+2/ Global Order Dictionary
+
 All active and inactive orders are stored in a dictionary. This enables constant time access to any order's attributes. The dictionary structure is ideal for fast lookups and ensures efficient management of orders across different states (active, inactive, filled, visisble, darkpool etc..).
 
 &nbsp;<br>
@@ -128,16 +133,14 @@ All active and inactive orders are stored in a dictionary. This enables constant
 This project is implemented in Python, because I am currently focused on developing my proficiency in the language. While Python is excellent for development and readability, it is not the best option for high frequency trading systems. An obvious future enhancement would be to write the code in a compiled language (e.g. C or C++), which would provide significant speed improvements and better control over memory management.
 
 2/ Extend Matching Logic
-To further enhance realism, advanced order behaviors could be added:
-- New Order Types: Add support for stop orders (triggered when price crosses a threshold) and iceberg orders (only partially visible in the book, with hidden size revealed over time). 
-- Order Modification and cancellation: Enable live adjustment or cancellation of active orders, where participants react to changing market conditions.
-
+To further enhance realism, advanced order features could be added:
+- New Order Types: Add support for stop orders (triggered when price crosses a threshold) and iceberg orders (only partially visible in the book, with hidden size revealed over time)
+- Order Modification and cancellation: Enable live adjustment or cancellation of active orders, where participants react to changing market conditions
 
 3/ User Interaction
 The simulation runs autonomously by generating random orders. An improvement would be allowing users to interact with the order book in real time, for example:
-- Manually submitting buy/sell orders via a simple interface
-- Observing immediate feedback and position changes
-- This would transform the project from a passive simulation to an interactive trading demonstration
+- Manually submitting buy/sell orders via an interface
+- Observing immediate feedback and position changes. This would transform the project from a passive simulation to an interactive trading demonstration
 
 &nbsp;<br>
 ## **Contact Info**
