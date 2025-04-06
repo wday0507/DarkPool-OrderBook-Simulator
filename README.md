@@ -12,13 +12,12 @@ I completed this project in order to develop and demonstrate my skills in python
 
 ## **File Descriptions**
 ### **orderbook_v35**
-This file is the main file of the project. It contains classes for orders and orderbooks. 
+This is the main module of the project. It contains classes for orders and orderbooks. 
 
-The Order class  creates order objects.
-Orders can be:
-- Bid / Ask (side)
-- Market / Limit / Fill-or-Kill / Immediate-or-Cancel (order type)
-- Visible / Darkpool (order visibility to market participants)
+The Order class creates order objects. Orders can be:
+- Side: Bid / Ask
+- Type: Market / Limit / Fill or Kill (FOK) / Immediate or Cancel (IOC)
+- Visibility: Visible / Dark pool
 
 The Orderbook class deals with processing orders, matching and maintaining the order book. 
 The key data structures are:
@@ -28,25 +27,31 @@ The key data structures are:
 - A list of darkpool ask orders
 - A dictionary of all orders (active and inactive)
 
-Visisble and darkpool orders are separated in this way because I assume visible orders always try and match with visible orders before darkpool orders (ditto for darkpool orders). 
-The orderbook lists store:
- - order id (for unique identification)
- - price (so orders can be sorted by price)
- - time (if orders have the same price, they must respect the FIFO principle)
+Visible and dark pool orders are separated to reflect the assumption that:
+- Visible orders prioritize matching against visible orders.
+- Dark pool orders prioritize matching against dark pool orders.
+
+Each order stored in the book contains:
+- Order ID (unique identification of orders)
+- Price (for sorting orders by price)
+- Timestamp (for FIFO ordering at equal prices)
         
-These are the order attributes that are essential for placing orders in the book correctly. The dictionary of all orders is accessed to obtain other attributes such as quantity, expirty time, order_type, etc...
+The dictionary of all orders is accessed to obtain other attributes such as quantity, expiry time, order type, etc...
       
-The Orderbook class has 16 separate functions to process specific order types. 2 sides, 4 order types, 2 visiblity options -> 16.
+There are 16 order matching functions to handle different combinations of:
+- 2 sides (Bid/Ask)
+- 4 order types (Market, Limit, FOK, IOC)
+- 2 visibility levels (Visible, Darkpool)
 
-Each of the 16 functions works differently, but they all contain the same core logic:
-1/ match order with opposing side orders from the visible book (for visisble orders, vice versa for darkpool orders)
-2/ if part of the order is not filled, match with opposing side of the darkpool book (for visisble orders, vice versa for darkpool orders)
-3/ if part of the order is not filled, add it to the orderbook
+Each function follows a general pattern:
+1/ Attempt to match the order with the opposing side of the visible book (or dark pool book, depending on order visibility).
+2/ If the order is not filled, attempt to match with the opposing side of the darkpool book (or vice versa).
+3/ If still unfilled, add the remaining order to the book.
 
-Some unique features of the matching logic include (but is not limited to):
+Some unique features of individual matching functions include (but is not limited to):
 - Visisble market orders -> track slipapge to measure market liquidity
 - Limit orders -> only match with prices equal to or better than the order price
-- FOK orders -> calcualte the sum of availble asks (for bid orders) that are available to match with before proceeding
+- FOK orders -> calculate availble matchable volume before processing the order to ensure full fill
 
 ### **test_orderbook**
 This file test the logic of all 16 matching functions. Specifically it tests:
@@ -67,14 +72,14 @@ This file generates an excel workbook that breaks down the simulation time into 
 ## **Outputs**
 
 ### **Order Book Graph**
-The below chart depicts the cumulative quantities of visible orders at each given price level. 
+The below chart depicts the cumulative quantities of visible orders at each given price level. When the simulation is run, this updates in real time.
 
 ![image](https://github.com/user-attachments/assets/a47bf610-43f6-4efb-a2f6-02fe93ab04fd)
 
 
 ### **Order Book Table**
 
-The below table shows a summary of the 8 most competitive bid and ask orders in the order book and their respective quantities.
+The below table shows a summary of the 8 most competitive bid and ask orders in the order book and their respective quantities. When the simulation is run, this updates in real time.
 
 ![image](https://github.com/user-attachments/assets/cef939f2-c233-462a-83d3-563a7ae0f901)
 
