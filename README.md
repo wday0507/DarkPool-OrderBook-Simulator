@@ -100,7 +100,7 @@ The table below shows a summary of the 8 most competitive bid and ask orders in 
 ### **Profiling Results**
 Below is a screenshot of the profiling results from the ob_profiler file. It decomposes the 60 second order book simulation into the time spent in each function. This was useful for streamlining my code.
 
-For example, FOK orders require calculating the available quantity in the book that can match with the order. Initially, I used a crude sum() list comprehension over both the visible and dark pool order books to calculate the available quantity. The profiling results highlighted how time-consuming this approach was, which was concerning, especially since only 5% of orders are FOK.
+For example, FOK orders require calculating the available quantity in the book that can match with the order. Initially, I used a crude sum() list comprehension over both the visible and dark pool order books to calculate the available quantity. The profiling results highlighted how time consuming this approach was, which was concerning, especially since only 5% of orders are FOK.
 
 To optimise, I changed the approach to iterate over the order book and stop once I knew there was at least as much available quantity as required by the order. This change significantly improved performance, especially as the order book grows larger.
 
@@ -185,6 +185,3 @@ The simulation runs autonomously by generating random orders. An improvement wou
 - Manually submitting buy/sell orders via an interface
 - Observing immediate feedback and position changes. This would transform the project from a passive simulation to an interactive trading demonstration
 
-&nbsp;<br>
-## **Contact Info**
-email: william.day@live.com
