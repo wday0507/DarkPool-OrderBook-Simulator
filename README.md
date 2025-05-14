@@ -35,8 +35,8 @@ The key data structures are:
 
 &nbsp;<br>
 Visible and dark pool orders are separated to reflect the assumption that:
-- Visible orders prioritize matching against visible orders.
-- Dark pool orders prioritize matching against dark pool orders.
+- Visible orders prioritise matching against visible orders.
+- Darkpool orders prioritise matching against dark pool orders.
 
 &nbsp;<br>
 Each order stored in the book contains:
